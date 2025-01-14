@@ -44,20 +44,17 @@ public:
 
 	void resize() override;
 	void setOverlay(bool overlayOnly) { this->overlayOnly = overlayOnly; }
-	std::string getDriverName() override {
+	std::string getDriverName() const override {
 		return adapterDesc;
 	}
-	std::string getDriverVersion() override {
+	std::string getDriverVersion() const override {
 		return adapterVersion;
 	}
-	bool hasPerPixel() override {
+	bool hasPerPixel() const override {
 		return featureLevel >= D3D_FEATURE_LEVEL_11_0;
 	}
 	bool isIntel() const {
 		return vendorId == VENDOR_INTEL;
-	}
-	bool isAMD() override {
-		return vendorId == VENDOR_ATI || vendorId == VENDOR_AMD;
 	}
 
 	void setFrameRendered() {

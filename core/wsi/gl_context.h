@@ -44,18 +44,15 @@ public:
 	bool isGLES() const {
 		return _isGLES;
 	}
-	std::string getDriverName() override {
+	std::string getDriverName() const override {
 		return driverName;
 	}
-	std::string getDriverVersion() override {
+	std::string getDriverVersion() const override {
 		return driverVersion;
-	}
-	bool isAMD() override {
-		return amd;
 	}
 	void resetUIDriver();
 
-	bool hasPerPixel() override
+	bool hasPerPixel() const override
 	{
 		return !isGLES()
 				&& (getMajorVersion() > 4

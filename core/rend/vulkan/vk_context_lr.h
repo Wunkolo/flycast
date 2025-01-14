@@ -75,8 +75,8 @@ public:
 			return true;
 		}
 	}
-	std::string getDriverName() override { vk::PhysicalDeviceProperties props; physicalDevice.getProperties(&props); return props.deviceName; }
-	std::string getDriverVersion() override {
+	std::string getDriverName() const override { vk::PhysicalDeviceProperties props; physicalDevice.getProperties(&props); return props.deviceName; }
+	std::string getDriverVersion() const override {
 		vk::PhysicalDeviceProperties props;
 		physicalDevice.getProperties(&props);
 
@@ -84,14 +84,11 @@ public:
 			+ "." + std::to_string(VK_API_VERSION_MINOR(props.driverVersion))
 			+ "." + std::to_string(VK_API_VERSION_PATCH(props.driverVersion));
 	}
-	bool isAMD() override {
-		return vendorID == VENDOR_ATI || vendorID == VENDOR_AMD;
-	}
 	vk::Format GetDepthFormat() const { return depthFormat; }
 	static VulkanContext *Instance() { return contextInstance; }
 	bool SupportsSamplerAnisotropy() const { return samplerAnisotropy; }
 	bool SupportsDedicatedAllocation() const { return dedicatedAllocationSupported; }
-	bool hasPerPixel() override { return fragmentStoresAndAtomics; }
+	bool hasPerPixel() const override { return fragmentStoresAndAtomics; }
 	bool hasProvokingVertex() { return provokingVertexSupported; }
 	const VMAllocator& GetAllocator() const { return allocator; }
 	vk::DeviceSize GetMaxMemoryAllocationSize() const { return maxMemoryAllocationSize; }

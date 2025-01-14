@@ -143,14 +143,11 @@ public:
 			return true;
 		}
 	}
-	std::string getDriverName() override {
+	std::string getDriverName() const override {
 		return driverName;
 	}
-	std::string getDriverVersion() override {
+	std::string getDriverVersion() const override {
 		return driverVersion;
-	}
-	bool isAMD() override {
-		return vendorID == VENDOR_ATI || vendorID == VENDOR_AMD;
 	}
 	vk::Format GetDepthFormat() const { return depthFormat; }
 	static VulkanContext *Instance() { return contextInstance; }
@@ -166,7 +163,7 @@ public:
 		graphicsQueue.submit(
 				vk::SubmitInfo(nullptr, nullptr, buffers), fence);
 	}
-	bool hasPerPixel() override { return fragmentStoresAndAtomics; }
+	bool hasPerPixel() const override { return fragmentStoresAndAtomics; }
 	bool hasProvokingVertex() { return provokingVertexSupported; }
 	bool recreateSwapChainIfNeeded();
 	void addToFlight(Deletable *object) override {

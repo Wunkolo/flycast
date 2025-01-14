@@ -42,17 +42,14 @@ public:
 	const pD3DCompile getCompiler() const { return this->D3DCompile; }
 	void presentFrame(ComPtr<ID3D11ShaderResourceView>& textureView, int width, int height);
 
-	std::string getDriverName() override { return ""; }
-	std::string getDriverVersion() override { return ""; }
+	std::string getDriverName() const override { return ""; }
+	std::string getDriverVersion() const override { return ""; }
 	bool hasPerPixel() override {
 		return featureLevel >= D3D_FEATURE_LEVEL_11_0;
 	}
 
 	bool isIntel() const {
 		return vendorId == VENDOR_INTEL;
-	}
-	bool isAMD() override {
-		return vendorId == VENDOR_ATI || vendorId == VENDOR_AMD;
 	}
 
 	DX11Shaders& getShaders() {
