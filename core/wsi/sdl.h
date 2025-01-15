@@ -23,7 +23,7 @@
 
 #include <SDL.h>
 
-class SDLGLGraphicsContext : public GLGraphicsContext
+class SDLGLGraphicsContext final : public GLGraphicsContext
 {
 public:
 	bool init();
