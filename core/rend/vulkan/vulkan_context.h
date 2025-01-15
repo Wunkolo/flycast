@@ -287,42 +287,4 @@ private:
 };
 #endif // !LIBRETRO
 
-static inline vk::Format findDepthFormat(vk::PhysicalDevice physicalDevice)
-{
-	const vk::Format depthFormats[] = { vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint, vk::Format::eD16UnormS8Uint };
-	vk::ImageTiling tiling;
-	vk::Format depthFormat = vk::Format::eUndefined;
-	for (size_t i = 0; i < std::size(depthFormats); i++)
-	{
-		vk::FormatProperties formatProperties = physicalDevice.getFormatProperties(depthFormats[i]);
-
-		if (formatProperties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment)
-		{
-			tiling = vk::ImageTiling::eOptimal;
-			depthFormat = depthFormats[i];
-			break;
-		}
-	}
-	if (depthFormat == vk::Format::eUndefined)
-	{
-		// Try to find a linear format
-		for (size_t i = 0; i < std::size(depthFormats); i++)
-		{
-			vk::FormatProperties formatProperties = physicalDevice.getFormatProperties(depthFormats[i]);
-
-			if (formatProperties.linearTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment)
-			{
-				tiling = vk::ImageTiling::eLinear;
-				depthFormat = depthFormats[i];
-				break;
-			}
-		}
-		if (depthFormat == vk::Format::eUndefined)
-			die("No supported depth/stencil format found");
-	}
-	NOTICE_LOG(RENDERER, "Using depth format %s tiling %s", vk::to_string(depthFormat).c_str(), vk::to_string(tiling).c_str());
-
-	return depthFormat;
-}
-
 #endif // USE_VULKAN
