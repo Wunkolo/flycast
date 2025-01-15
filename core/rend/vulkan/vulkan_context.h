@@ -106,14 +106,14 @@ public:
 	VkInstance GetInstance() const { return static_cast<VkInstance>(instance.get()); }
 	u32 GetGraphicsQueueFamilyIndex() const { return graphicsQueueIndex; }
 	void resize() override { resized = true; }
-	bool IsValid() { return width != 0 && height != 0; }
+	bool IsValid() const { return width != 0 && height != 0; }
 	void NewFrame();
 	void BeginRenderPass();
 	void EndFrame(vk::CommandBuffer cmdBuffer = vk::CommandBuffer());
 	void Present() noexcept;
 	void PresentFrame(vk::Image image, vk::ImageView imageView, const vk::Extent2D& extent, float aspectRatio) noexcept;
 	void PresentLastFrame();
-	bool GetLastFrame(std::vector<u8>& data, int& width, int& height);
+	bool GetLastFrame(std::vector<u8>& data, int& width, int& height); 
 
 	vk::PhysicalDevice GetPhysicalDevice() const { return physicalDevice; }
 	vk::Device GetDevice() const { return *device; }
@@ -129,7 +129,7 @@ public:
 	bool IsRendering() const { return rendering; }
 	vk::DeviceSize GetUniformBufferAlignment() const { return uniformBufferAlignment; }
 	vk::DeviceSize GetStorageBufferAlignment() const { return storageBufferAlignment; }
-	bool IsFormatSupported(TextureType textureType)
+	bool IsFormatSupported(TextureType textureType) const
 	{
 		switch (textureType)
 		{
@@ -164,7 +164,7 @@ public:
 				vk::SubmitInfo(nullptr, nullptr, buffers), fence);
 	}
 	bool hasPerPixel() const override { return fragmentStoresAndAtomics; }
-	bool hasProvokingVertex() { return provokingVertexSupported; }
+	bool hasProvokingVertex() const { return provokingVertexSupported; }
 	bool recreateSwapChainIfNeeded();
 	void addToFlight(Deletable *object) override {
 		inFlightObjects[GetCurrentImageIndex()].emplace_back(object);

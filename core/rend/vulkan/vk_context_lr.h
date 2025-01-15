@@ -61,7 +61,7 @@ public:
 	}
 	vk::DeviceSize GetUniformBufferAlignment() const { return uniformBufferAlignment; }
 	vk::DeviceSize GetStorageBufferAlignment() const { return storageBufferAlignment; }
-	bool IsFormatSupported(TextureType textureType)
+	bool IsFormatSupported(TextureType textureType) const
 	{
 		switch (textureType)
 		{
