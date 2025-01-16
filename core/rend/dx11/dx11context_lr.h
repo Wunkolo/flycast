@@ -44,7 +44,7 @@ public:
 
 	std::string getDriverName() const override { return ""; }
 	std::string getDriverVersion() const override { return ""; }
-	bool hasPerPixel() override {
+	bool hasPerPixel() const override {
 		return featureLevel >= D3D_FEATURE_LEVEL_11_0;
 	}
 
@@ -63,7 +63,7 @@ public:
 	}
 	void drawOverlay(int width, int height);
 
-	bool textureFormatSupported(TextureType texType) {
+	bool textureFormatSupported(TextureType texType) const {
 		return supportedTexFormats[(int)texType];
 	}
 
