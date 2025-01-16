@@ -69,7 +69,7 @@ public:
 	bool hasShaderCache() const {
 		return _hasShaderCache;
 	}
-	bool textureFormatSupported(TextureType texType) {
+	bool textureFormatSupported(TextureType texType) const {
 		return supportedTexFormats[(int)texType];
 	}
 
