@@ -29,9 +29,16 @@ protected:
 
 private:
 	u8 *startAddr;
-#ifdef _M_X64
+#if defined(_M_X64) || defined(_M_ARM64)
 	std::vector<RUNTIME_FUNCTION *> tables;
-	std::vector<u16> codes;
+
+#if defined(_M_X64)
+	using OpCode = u16;
+#elif defined(_M_ARM64)
+	using OpCode = u8;
+#endif
+	std::vector<OpCode> codes;
+
 #endif
 #if defined(__unix__) || defined(__APPLE__) || defined(__SWITCH__)
 	int stackOffset = 0;
@@ -42,7 +49,9 @@ private:
 #endif
 };
 
-#if HOST_CPU != CPU_X64 \
+#if 1 \
+	&& HOST_CPU != CPU_X64 \
+	&& HOST_CPU != CPU_ARM64 \
 	&& (HOST_CPU != CPU_ARM64 || defined(_WIN32))	\
 	&& (HOST_CPU != CPU_X86 || defined(_WIN32))		\
 	&& (HOST_CPU != CPU_ARM || !defined(__ANDROID__))
