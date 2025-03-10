@@ -39,7 +39,7 @@
 // ARM64 unwind-op codes
 // https://docs.microsoft.com/en-us/cpp/build/arm64-exception-handling#unwind-codes
 // https://www.corsix.org/content/windows-arm64-unwind-codes
-typedef enum _UNWIND_OP_CODES {
+typedef enum UNWIND_CODE_OPS {
 	UWOP_NOP = 0xE3,
 	UWOP_ALLOC_S = 0x00,           // sub sp, sp, i*16 (512-btes)
 	UWOP_ALLOC_L = 0xE0'00'00'00,  // sub sp, sp, i*16 (256MiB)
@@ -78,13 +78,39 @@ void UnwindInfo::pushReg(u32 offset, int reg)
 	codes.push_back(offset | (UWOP_PUSH_NONVOL << 8) | (reg << 12));
 }
 #elif defined(_M_ARM64)
+// Registers are DWARF register-ids:
+// x0-x30		0 - 30
+// SP			31
+// d0-d31		64 - 95
+
 void UnwindInfo::saveReg(u32 offset, int reg, int stackOffset)
 {
-	codes.push_back(0);
+	// GP registers only
+	verify(reg <= 31);
+
+	// https://www.corsix.org/content/windows-arm64-unwind-codes#arm64_save_any_reg
+	// save_any_reg
+	// 11100111 000nnnnn 00iiiiii
+	// str x(0+n), [sp+i*8]
+	codes.push_back(0b11100111);
+	codes.push_back(reg);
+	codes.push_back(stackOffset / 8);
 }
 void UnwindInfo::saveExtReg(u32 offset, int reg, int stackOffset)
 {
-	codes.push_back(0);
+	// FP registers only
+	verify(reg >= 64);
+	verify(reg >= 95);
+
+	reg -= 64;
+
+	// https://www.corsix.org/content/windows-arm64-unwind-codes#arm64_save_any_reg
+	// save_any_reg
+	// 11100111 000nnnnn 01iiiiii	
+	// str d(0+n), [sp+i*8]
+	codes.push_back(0b11100111);
+	codes.push_back(reg);
+	codes.push_back((stackOffset / 8) | 01000000);
 }
 #endif
 
